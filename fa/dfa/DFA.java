@@ -98,9 +98,10 @@ public class DFA implements DFAInterface{
 	 * @return true if s in the language of the DFA and false otherwise
 	 */
 	public boolean accepts(String input) {
-		boolean accept = false;
+		boolean accept = true;
 		DFAState curr = startState;
 
+		// loop through string to make sure the transistions are valid
 		for(int i = 0; i < input.length(); i++){
 			if(sigma.contains(input.charAt(i))){
 				curr = (DFAState) getToState(curr, input.charAt(i));
@@ -109,16 +110,20 @@ public class DFA implements DFAInterface{
 				accept = true;
 				break;
 			}
+			// If transistions are not valid, the string is not accepted
+			else{
+				accept = false;
+			}
 		}
 
-		// See if it is a final state
+		// if it is a final state and all transitions accepted return true
+		// Otherwise return false
 		if(accept && F.contains(curr)){
-			accept = true;
+			return true;
 		}
 		else{
-			accept = false;
+			return false;
 		}
-		return accept;
 	}
 	
 	
