@@ -66,13 +66,13 @@ public class DFA implements DFAInterface{
 	 */
 	public void addTransition(String valueOf, char c, String valueOf2) {
 		DFAState transState = null;
-		String key = valueOf + c;
+		String keyValue = valueOf + c;
 
 		// Finding end state in Q set
 		transState = getStateFromQ(valueOf2);
 
 		// Adding key and transState in delta set
-		delta.put(key, transState);	
+		delta.put(keyValue, transState);	
 		
 		// Adding c to sigma if not already there
 		if(!sigma.contains(c)){
@@ -87,8 +87,23 @@ public class DFA implements DFAInterface{
 	 * @return a copy of this DFA
 	 */
 	public DFA complement() {
-		// TODO Auto-generated method stub
-		return null;
+		// Creating new DFA object for complement
+		DFA dfaC = new DFA();
+
+		// Instantiating dfaC elements with original dfa elements 
+		dfaC.Q = this.Q;
+		dfaC.delta = this.delta;
+		dfaC.sigma = this.sigma;
+		dfaC.startState = this.startState;
+
+		// Storing dfaC final states from Q if they are a state
+		// if they are not an original dfa final state
+		for(DFAState state : this.Q){
+			if(!this.F.contains(state)){
+				dfaC.F.add(state);
+			}
+		}
+		return dfaC;
 	}
 
 	/**
@@ -107,7 +122,6 @@ public class DFA implements DFAInterface{
 				curr = (DFAState) getToState(curr, input.charAt(i));
 			}
 			else if(input.charAt(i) == 'e'){
-				accept = true;
 				break;
 			}
 			// If transistions are not valid, the string is not accepted
@@ -200,9 +214,9 @@ public class DFA implements DFAInterface{
 	 * Q = { b a }
 	 * Sigma = { 0 1 }
 	 * delta = 
-	 * 					0	1
-	 * 				b	a	b
-	 * 				a	a	b
+	 * 				0	1
+	 * 			b	a	b
+	 * 			a	a	b
 	 * q0 = a
 	 * F = { b}
 	 * 
